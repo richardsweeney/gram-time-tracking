@@ -1,0 +1,35 @@
+table {
+	@include font-feature-settings("kern", "liga", "tnum");
+	border-collapse: collapse;
+	margin: $small-spacing 0;
+	table-layout: fixed;
+	width: 100%;
+}
+
+thead,
+tfoot {
+	font-weight: 600;
+	text-align: left;
+}
+
+thead {
+	border-top: 1px solid $base-border-color;
+}
+
+td,
+th{
+	border-bottom: $base-border;
+	padding: $small-spacing / 2;
+}
+
+tr,
+td,
+th {
+	vertical-align: middle;
+}
+
+tbody {
+	tr:nth-of-type(odd) {
+		background: $light-gray;
+	}
+}

@@ -1,0 +1,73 @@
+
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+// Bootstrap
+@import "bourbon/bourbon";
+@import "base/base";
+@import "neat/neat";
+@import "grid-settings";
+@import "jquery-ui";
+@import "timepicker";
+@import "shifts";
+
+body {
+	margin: 0;
+	padding-top: 70px;
+}
+
+.site-header {
+	background: rgba( $theme-color, 0.99% );
+	height: 70px;
+	font-weight: bold;
+	@include position(fixed, 0 0 null 0);
+	.container {
+		padding: $small-spacing;
+		@include display(flex);
+		@include flex-wrap(wrap);
+		@include align-items(center);
+		@include justify-content(space-between);
+	}
+	a {
+		color: white;
+	}
+}
+
+.logo {
+	display: block;
+	img {
+		display: block;
+		max-width: 150px;
+		height: 47px;
+		//max-width: 150px;
+	}
+}
+
+.main-nav {
+	li {
+		display: inline-block;
+		margin-left: $small-spacing;
+	}
+}
+
+.help-block {
+	display: block;
+	padding: $small-spacing 0;
+	color: #870b0f;
+}
+
+.container {
+	margin: 0 auto;
+	padding-left: $small-spacing;
+	padding-right: $small-spacing;
+	max-width: 1000px;
+}
+
+.site-main {
+	padding: $base-spacing $small-spacing;
+}
+
+.shift-table-filters-container,
+.site-footer {
+	padding: $base-spacing 0;
+}
