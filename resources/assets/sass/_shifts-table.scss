@@ -1,0 +1,83 @@
+
+.shift-table-filters {
+	padding-bottom: $base-spacing;
+	@include clearfix;
+	@include media($large-screen-up) {
+		padding-bottom: 0;
+		@include display(flex);
+		@include align-items(flex-start);
+		@include justify-content(space-between);
+		.select2-container--default {
+			margin-top: 4px;
+		}
+	}
+}
+
+.shift-table-filters__element {
+	input,
+	button,
+	select {
+		width: 100%;
+		height: 35px;
+	}
+	button {
+		padding-top: 0.6em;
+	}
+	@include media(max-width $large-screen) {
+		&.button-element {
+			margin-top: $small-spacing / 2;
+			label {
+				height: 0;
+			}
+		}
+	}
+	@include media(min-width $medium-screen max-width $large-screen) {
+		&.date-picker-element,
+		&.button-element {
+			width: 48%;
+			float: left;
+			&:nth-of-type(odd) {
+				float: right;
+			}
+		}
+		&.date-picker-element {
+			padding-top: $small-spacing;
+		}
+	}
+	&.user-select {
+		padding-bottom: $base-spacing;
+	}
+	@include media($large-screen-up) {
+		width: 14%;
+		&.user-select {
+			width: 39%;
+		}
+	}
+}
+
+.shifts-table-container {
+	overflow-x: scroll;
+	table {
+		min-width: 700px;
+	}
+	form {
+		display: inline-block;
+	}
+	button,
+	.button {
+		padding: 0.5em 0.75em;
+	}
+}
+
+.pagination-container {
+	text-align: center;
+	font-size: rem(18);
+	padding-top: $small-spacing;
+	li {
+		display: inline-block;
+	}
+	span,
+	a {
+		padding: 5px;
+	}
+}

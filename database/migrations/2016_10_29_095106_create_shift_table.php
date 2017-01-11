@@ -17,8 +17,9 @@ class CreateShiftTable extends Migration
         	$table->increments('id');
 
 	        $table->integer('user_id')->unsigned();
-	        $table->dateTime('start');
-	        $table->dateTime('end');
+	        $table->dateTime('date');
+	        $table->time('start');
+	        $table->time('end');
 	        $table->timestamps();
 
 	        $table

@@ -27,7 +27,7 @@
 
 			<div class="container">
 
-				<a class="logo" href="{{ url('/') }}">
+				<a class="logo" href="{{ url('/shifts') }}">
 					<img src="{{ url('/img/gram_text_logo.svg') }}" alt="Gram Logo">
 				</a>
 
@@ -38,7 +38,8 @@
 							<li><a href="{{ url('/login') }}">Login</a></li>
 							<li><a href="{{ url('/register') }}">Register</a></li>
 						@else
-							<li><a href="{{ url('/shifts') }}">Shifts</a></li>
+							<li><a href="{{ url('/shifts/create') }}">Log a shift</a></li>
+							<li><a href="{{ url('/shifts') }}">All shifts</a></li>
 							<li>
 								<a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 									Logout

@@ -25,39 +25,36 @@
 
 		<div class="shift-form-container">
 
-			<form class="shift-form" role="form" method="POST" action="{{ url('/', $shift['id']) }}">
+			<form class="shift-form" role="form" method="POST" action="{{ action('ShiftController@update', $shift) }}">
 				{{ csrf_field() }}
+                {{ method_field('PUT') }}
 
 				<div class="shift-form__day-select">
-
-					<h3>When did you work?</h3>
 
 					<div class="button-group hidden">
 
 						<label for="date-choose">
-							<input id="date-choose" class="datepicker-toggle" type="radio" name="date" value="" checked>
+							<input id="date-choose" class="datepicker-toggle" type="radio" name="date" value="{{ $shift->date->format('Y-m-d') }}" checked>
 							<span class="button-group-item">Select a date</span>
 						</label>
 
 					</div>
 
-					<input type="text" class="no-hide" name="datepicker" id="datepicker" value="{{ $shift['date'] }}">
+					<input type="text" class="no-hide" name="datepicker" id="datepicker" value="{{ $shift->date->format('Y-m-d') }}">
 
 				</div>
 
 				<ul class="shift-form__fields">
 					<li>
-						<label for="start-time">Start Time</label>
-						<input class="timepicker" type="text" value="{{ $shift['startTime'] }}" id="start-time" name="start_time">
+						<label for="start">Start</label>
+						<input class="timepicker" type="text" value="{{ $shift->start->format('H:i') }}" id="start" name="start">
 					</li>
 
 					<li>
-						<label for="end-time">End Time</label>
-						<input class="timepicker" type="text" value="{{ $shift['endTime'] }}" id="end-time" name="end_time">
+						<label for="end">End</label>
+						<input class="timepicker" type="text" value="{{ $shift->end->format('H:i') }}" id="end" name="end">
 					</li>
 				</ul>
-
-				{{ method_field('PUT') }}
 
 				<button type="submit">Submit</button>
 			</form>

@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Role;
-use App\Shift;
 use App\User;
+use App\Shift;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class ShiftController extends Controller
+class ShiftTableController extends Controller
 {
 
+	protected $weekdayOvertimeStarts = 18;
+
 	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
+	 * ShiftTableController constructor.
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->middleware('auth');
 	}
 
@@ -31,16 +28,12 @@ class ShiftController extends Controller
 	 */
 	public function index(Request $request)
 	{
+		if ($request->show_report) {
+			return $this->report($request);
+		}
+
 		$startDate = $request->start_date;
 		$endDate = $request->end_date;
-
-		if ($request->show_report) {
-			return view('shifts-report', [
-				'reports' => $this->calculateReports($request),
-				'startDate' => ! empty( $startDate ) ? date('D, jS M Y', strtotime( $startDate ) ) : 'All',
-				'endDate' => ! empty( $endDate ) ? date('D, jS M Y', strtotime( $endDate ) ) : date('D, jS M Y'),
-			]);
-		}
 
 		$user = auth()->user();
 		if ($user->hasRole('admin')) {
@@ -72,124 +65,16 @@ class ShiftController extends Controller
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function create(Request $request)
+	public function report(Request $request)
 	{
-		return view('shift');
-	}
+		$startDate = $request->start_date;
+		$endDate = $request->end_date;
 
-
-	/**
-	 * @param Request $request
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function store(Request $request)
-	{
-		$this->validate($request, $this->getValidationParams());
-
-		$start = new Carbon($request->start);
-		$end = new Carbon($request->end);
-		$date = new Carbon($request->date);
-
-		$user = auth()->user();
-
-		Shift::create([
-			'start' => $start->toTimeString(),
-			'end' => $end->toTimeString(),
-			'date' => $date,
-			'user_id' => $user->id,
+		return view('shifts-report', [
+			'reports' => $this->calculateReports($request),
+			'startDate' => ! empty( $startDate ) ? date('D, jS M Y', strtotime( $startDate ) ) : 'All',
+			'endDate' => ! empty( $endDate ) ? date('D, jS M Y', strtotime( $endDate ) ) : date('D, jS M Y'),
 		]);
-
-		return redirect('/shifts/create')->with('status', sprintf(
-			'Shift Added. %sView all shifts%s',
-			'<a href="' . url( '/shifts' ) . '">',
-			'</a>'
-		));
-	}
-
-
-	/**
-	 * @param $id
-	 * @param Request $request
-	 *
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 */
-	public function show($id, Request $request)
-	{
-		return Shift::findOrFail($id);
-	}
-
-
-	/**
-	 * Update a shift.
-	 *
-	 * @param $id
-	 * @param Request $request
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function update($id, Request $request)
-	{
-		$shift = Shift::findOrFail($id);
-
-		$this->validate($request, $this->getValidationParams());
-
-		$start = new Carbon($request->start);
-		$end = new Carbon($request->end);
-		$date = new Carbon($request->date);
-
-		$shift->start = $start->toTimeString();
-		$shift->end = $end->toTimeString();
-		$shift->date = $date;
-
-		$shift->save();
-
-		return redirect('/shifts')->with('status', 'Shift Updated');
-	}
-
-
-	/**
-	 * Edit a shift.
-	 *
-	 * @param int $id
-	 * @param Request $request
-	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function edit($id, Request $request)
-	{
-		return view('shift-edit', [
-			'shift' => Shift::findOrFail($id),
-		]);
-	}
-
-
-	/**
-	 * Delete a shift.
-	 *
-	 * @param $id
-	 * @param Request $request
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function destroy($id, Request $request)
-	{
-		Shift::destroy($id);
-
-		return redirect('/shifts')->with('status', 'Shift Deleted');
-	}
-
-
-	/**
-	 * @return array
-	 */
-	protected function getValidationParams()
-	{
-		return [
-			'date' => 'required|date_format:Y-m-d',
-			'start' => 'required|date_format:H:i',
-			'end' => 'required|date_format:H:i',
-		];
 	}
 
 
@@ -306,10 +191,16 @@ class ShiftController extends Controller
 
 		} else {
 			$weekdayRegular = new Carbon();
-			$weekdayRegular->setTime(18, 00);
+			$weekdayRegular->setTime($this->weekdayOvertimeStarts, 00);
 
-			$totalShifTimes['weekday'] += $shift->start->diffInHours($weekdayRegular);
-			$totalShifTimes['weekday_extra'] += $shift->end->diffInHours($weekdayRegular);
+			// The user has weekday worked overtime this day.
+			if ($shift->end->format('H') > $this->weekdayOvertimeStarts) {
+				$totalShifTimes['weekday'] += $shift->start->diffInHours($weekdayRegular);
+				$totalShifTimes['weekday_extra'] += $shift->end->diffInHours($weekdayRegular);
+			}
+			else {
+				$totalShifTimes['weekday'] += $shift->start->diffInHours($shift->end);
+			}
 		}
 
 		return $totalShifTimes;

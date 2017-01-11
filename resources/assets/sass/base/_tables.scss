@@ -2,8 +2,8 @@ table {
 	@include font-feature-settings("kern", "liga", "tnum");
 	border-collapse: collapse;
 	margin: $small-spacing 0;
-	table-layout: fixed;
 	width: 100%;
+	border-spacing: 0.5rem;
 }
 
 thead,

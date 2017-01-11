@@ -7,26 +7,36 @@
 @import "base/base";
 @import "neat/neat";
 @import "grid-settings";
+@import "select2";
 @import "jquery-ui";
 @import "timepicker";
 @import "shifts";
+@import "shifts-table";
+
+$header-height: 80px;
 
 body {
 	margin: 0;
-	padding-top: 70px;
+	padding-top: $header-height;
 }
 
 .site-header {
 	background: rgba( $theme-color, 0.99% );
-	height: 70px;
+	height: $header-height;
 	font-weight: bold;
+	z-index: 100;
 	@include position(fixed, 0 0 null 0);
+	@include media(max-width $medium-screen) {
+		text-align: center;
+	}
 	.container {
 		padding: $small-spacing;
-		@include display(flex);
-		@include flex-wrap(wrap);
-		@include align-items(center);
-		@include justify-content(space-between);
+		@include media($medium-screen-up) {
+			@include display(flex);
+			@include flex-wrap(wrap);
+			@include align-items(center);
+			@include justify-content(space-between);
+		}
 	}
 	a {
 		color: white;
@@ -36,10 +46,11 @@ body {
 .logo {
 	display: block;
 	img {
-		display: block;
-		max-width: 150px;
-		height: 47px;
-		//max-width: 150px;
+		max-width: rem(150);
+		height: rem(30);
+		@include media($medium-screen-up) {
+			height: rem(50);
+		}
 	}
 }
 
@@ -47,6 +58,9 @@ body {
 	li {
 		display: inline-block;
 		margin-left: $small-spacing;
+		&:first-child {
+			margin-left: 0;
+		}
 	}
 }
 
@@ -67,7 +81,6 @@ body {
 	padding: $base-spacing $small-spacing;
 }
 
-.shift-table-filters-container,
 .site-footer {
 	padding: $base-spacing 0;
 }

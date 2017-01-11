@@ -19,8 +19,12 @@ button,
 	vertical-align: middle;
 	white-space: nowrap;
 	@include transition(background 0.2s ease);
-	&.delete {
+	&.alt {
 		background: $theme-color-2;
+		&:hover,
+		&:focus {
+			background-color: darken($theme-color-2, 10%);
+		}
 	}
 	&:hover,
 	&:focus {

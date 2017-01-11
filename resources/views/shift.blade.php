@@ -25,7 +25,7 @@
 
 		<div class="shift-form-container">
 
-			<form class="shift-form" role="form" method="POST" action="{{ url('/') }}">
+			<form class="shift-form" role="form" method="POST" action="{{ url('/shifts') }}">
 				{{ csrf_field() }}
 
 				<div class="shift-form__day-select">
@@ -59,13 +59,13 @@
 
 				<ul class="shift-form__fields">
 					<li>
-						<label for="start-time">Start Time</label>
-						<input class="timepicker" type="text" value="{{ old('start_time') }}" id="start-time" name="start_time">
+						<label for="start">Start</label>
+						<input class="timepicker" type="text" value="{{ old('start') }}" id="start" name="start">
 					</li>
 
 					<li>
-						<label for="end-time">End Time</label>
-						<input class="timepicker" type="text" value="{{ old('end_time') }}" id="end-time" name="end_time">
+						<label for="end">End</label>
+						<input class="timepicker" type="text" value="{{ old('end') }}" id="end" name="end">
 					</li>
 				</ul>
 

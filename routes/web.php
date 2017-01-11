@@ -13,11 +13,9 @@
 
 Auth::routes();
 
-Route::get('/', 'ShiftController@index');
-Route::post('/', 'ShiftController@add');
-Route::get('/{id}', 'ShiftController@edit')->where('id', '[0-9]+');
-Route::put('/{id}', 'ShiftController@update')->where('id', '[0-9]+');
-Route::delete('/{id}', 'ShiftController@delete')->where('id', '[0-9]+');
 
-Route::get('/shifts', 'ShiftController@shifts');
-Route::post('/export/{id}', 'ShiftController@export')->where('id', '[0-9]+');
+Route::resource('shifts', 'ShiftController', [
+	'except' => ['index']
+]);
+
+Route::get('/shifts', 'ShiftTableController@index');
